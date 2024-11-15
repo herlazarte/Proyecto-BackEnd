@@ -10,7 +10,7 @@ class UsuarioForm(forms.ModelForm):
 class SolicitudForm(forms.ModelForm):
     class Meta:
         model = Solicitud
-        fields = ['cliente', 'servicio', 'fecha_servicio']
+        fields = ['servicio', 'fecha_servicio']
 
 # class ClienteForm(forms.ModelForm):
 #     class Meta:
