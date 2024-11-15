@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Bienvenido clientes</h1>
+    <h1>Bienvenido {{ request.user.username }}</h1>
 
 
     <a href="{% url 'crear_solicitud' %} " type="button">Realizar Solicitud</a>

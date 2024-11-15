@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Iniciar Sesión</title>
 </head>
 <body>
+    <h2>Iniciar Sesión</h2>
     <form method="post">
         {% csrf_token %}
-        usuario: <input type="text" name="username" id="username" required>
-        contraseña: <input type="password" name="password" id="password" required>
-        <button type="submit">Iniciar sesión</button>
+        {{ form.as_p }}
+        <button type="submit">Iniciar Sesión</button>
     </form>
-    {% if form.errors %}
-        <p>{{ form.errors }}</p>
-    {% endif %}
-    
 </body>
 </html>

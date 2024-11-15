@@ -133,3 +133,8 @@ LOGIN_REDIRECT_URL = '/usuarios/dashboard_cliente/'
 
 #Redirigir el logout a login
 LOGOUT_REDIRECT_URL = '/login/'
+
+PERMISSIONS = [
+    'es_cliente',
+    'es_profesional',
+]
