@@ -8,6 +8,7 @@ class UsuarioForm(forms.ModelForm):
         model = Usuario
         fields = ['username','email', 'password', 'rol']
     
+
     #para encriptar la contraseña 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -17,7 +18,14 @@ class UsuarioForm(forms.ModelForm):
 
         if commit:
             user.save()
-        return user        
+        return user    
+ 
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ['direccion', 'telefono']
+
+
 
 
 class SolicitudForm(forms.ModelForm):
@@ -28,8 +36,8 @@ class SolicitudForm(forms.ModelForm):
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         if user:
-            self.fields['cliente'].initial = request.user.username
-            self.fields['cliente'].widget = forms.HiddenInput()
+            self.fields['cliente'].initial = user.cliente  # Establecer el cliente relacionado al usuario
+            self.fields['cliente'].widget = forms.HiddenInput()  # Hacer el campo oculto para el usuario
 
         # def __init__(self, *args, **kwargs):
         #     super().__init__(*args, **kwargs)

@@ -1,8 +1,10 @@
-
-{% block content %}
-<form method="post">
+<form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Guardar">
-</form>   
-{% endblock %}
+    {{ form.as_p }}  <!-- Formulario para Usuario -->
+    
+    <!-- Formulario adicional para Cliente -->
+    <h3>Datos del Cliente</h3>
+    {{ cliente_form.as_p }}
+    
+    <button type="submit">Registrar</button>
+</form>
