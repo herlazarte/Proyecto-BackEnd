@@ -6,10 +6,14 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Bienvenido clientes</h1>
-
-
-    <a href="{% url 'crear_solicitud' %} " type="button">Realizar Solicitud</a>
+{% block content %}
+    <h1>Crear Solicitud</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear Solicitud</button>
+    </form>
+{% endblock%}	
     
 </body>
 </html>
