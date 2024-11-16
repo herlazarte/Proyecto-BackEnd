@@ -1,151 +1,146 @@
 <!doctype html>
 <html lang="en">
   <head>
+    {% block head %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>KeyServ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    {% endblock %}
   </head>
   <body>
-
-  {% block navbar %} 
+      {% block navbar %}
       <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <h1 class="navbar-brand text-warning" href="#">keyServ</h1>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesion</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'alta_cliente' %}">Registrarme</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-dark text-white" href="#">Regístrate</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  {% endblock navbar %}  
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+          <h1 class="navbar-brand text-warning" href="#">keyServ</h1>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Iniciar Sesion</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'alta_cliente' %}">Registrarme</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn btn-dark text-white" href="#">Regístrate</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% endblock %}
 
-  {% block section %}  
-  <!-- Hero Section -->
-  <section class="bg-primary text-white text-center py-5">
-    <div class="container">
-      <h1 class="display-4">Soluciones Profesionales a un Clic</h1>
-      <p class="lead">Encuentra al mejor electricista, plomero, cerrajero y más, de forma rápida y segura</p>
-      <a href="#" class="btn btn-warning btn-lg mt-3 text-white">Conéctate con un Profesional</a>
-    </div>
-  </section>
-  {% endblock section %}
+      {% block content %}
+      <!-- Hero Section -->
+      <section class="bg-primary text-white text-center py-5">
+        <div class="container">
+          <h1 class="display-4">Soluciones Profesionales a un Clic</h1>
+          <p class="lead">Encuentra al mejor electricista, plomero, cerrajero y más, de forma rápida y segura</p>
+          <a href="#" class="btn btn-warning btn-lg mt-3 text-white">Conéctate con un Profesional</a>
+        </div>
+      </section>
 
-  {% block services %} 
-  <!-- Services Section -->
-  <section class="py-5">
-    <div class="container text-center">
-      <h2 class="text-dark mb-5">Nuestros Servicios</h2>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card border-warning">
-            <div class="card-body">
-              <h3 class="card-title">Electricistas</h3>
-              <p class="card-text">Soluciones rápidas y seguras para instalaciones eléctricas, reparaciones y más.</p>
+      <!-- Services Section -->
+      <section class="py-5">
+        <div class="container text-center">
+          <h2 class="text-dark mb-5">Nuestros Servicios</h2>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card border-warning">
+                <div class="card-body">
+                  <h3 class="card-title">Electricistas</h3>
+                  <p class="card-text">Soluciones rápidas y seguras para instalaciones eléctricas, reparaciones y más.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card border-warning">
+                <div class="card-body">
+                  <h3 class="card-title">Plomeros</h3>
+                  <p class="card-text">Expertos en mantenimiento de tuberías, instalaciones de agua y sistemas de drenaje.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card border-warning">
+                <div class="card-body">
+                  <h3 class="card-title">Cerrajeros</h3>
+                  <p class="card-text">Accede a profesionales para aperturas de emergencia, cambios de cerraduras y más.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="card border-warning">
-            <div class="card-body">
-              <h3 class="card-title">Plomeros</h3>
-              <p class="card-text">Expertos en mantenimiento de tuberías, instalaciones de agua y sistemas de drenaje.</p>
+      </section>
+
+      <!-- Benefits Section -->
+      <section class="bg-light py-5">
+        <div class="container text-center">
+          <h2 class="text-dark mb-5">¿Por qué Elegirnos?</h2>
+          <div class="row">
+            <div class="col-md-4">
+              <h4 class="text-dark">Profesionales Certificados</h4>
+              <p>Trabajamos solo con profesionales altamente calificados y verificados.</p>
+            </div>
+            <div class="col-md-4">
+              <h4 class="text-dark">Servicios a Domicilio</h4>
+              <p>Conveniente y fácil: nuestros profesionales llegan directamente a tu hogar o negocio.</p>
+            </div>
+            <div class="col-md-4">
+              <h4 class="text-dark">Precios Transparentes</h4>
+              <p>Presupuestos claros sin costos ocultos, desde el inicio de cada trabajo.</p>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="card border-warning">
-            <div class="card-body">
-              <h3 class="card-title">Cerrajeros</h3>
-              <p class="card-text">Accede a profesionales para aperturas de emergencia, cambios de cerraduras y más.</p>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section class="py-5">
+        <div class="container text-center">
+          <h2 class="text-dark mb-5">Lo que Dicen Nuestros Clientes</h2>
+          <div class="row">
+            <div class="col-md-4">
+              <blockquote class="blockquote">
+                <p>"Encontré un excelente cerrajero en minutos, resolvió mi problema rápido y fue muy amable."</p>
+                <footer class="blockquote-footer">Carlos Mejía, <cite title="Source Title">Cliente satisfecho</cite></footer>
+              </blockquote>
+            </div>
+            <div class="col-md-4">
+              <blockquote class="blockquote">
+                <p>"El electricista que contraté fue puntual y profesional. Instaló las luces sin problemas."</p>
+                <footer class="blockquote-footer">Ana Morales, <cite title="Source Title">Usuario frecuente</cite></footer>
+              </blockquote>
+            </div>
+            <div class="col-md-4">
+              <blockquote class="blockquote">
+                <p>"Servicio impecable. Contacté a un plomero y solucionó una fuga en mi cocina en menos de una hora."</p>
+                <footer class="blockquote-footer">Luis Ortega, <cite title="Source Title">Cliente recurrente</cite></footer>
+              </blockquote>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-  {% endblock services %}
+      </section>
+      {% endblock %}
 
-  {% block benefits %} 
-  <!-- Benefits Section -->
-  <section class="bg-light py-5">
-    <div class="container text-center">
-      <h2 class="text-dark mb-5">¿Por qué Elegirnos?</h2>
-      <div class="row">
-        <div class="col-md-4">
-          <h4 class="text-dark">Profesionales Certificados</h4>
-          <p>Trabajamos solo con profesionales altamente calificados y verificados.</p>
+      {% block footer %}
+      <!-- Footer -->
+      <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <div class="container">
+          <p>&copy; 2024 keyServ - Todos los derechos reservados</p>
+          <a href="#" class="text-white">Términos y Condiciones</a> | <a href="#" class="text-white">Política de Privacidad</a>
         </div>
-        <div class="col-md-4">
-          <h4 class="text-dark">Servicios a Domicilio</h4>
-          <p>Conveniente y fácil: nuestros profesionales llegan directamente a tu hogar o negocio.</p>
-        </div>
-        <div class="col-md-4">
-          <h4 class="text-dark">Precios Transparentes</h4>
-          <p>Presupuestos claros sin costos ocultos, desde el inicio de cada trabajo.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  {% endblock benefits %}
-  
-  {% block testimonials %} 
-  <!-- Testimonials Section -->
-  <section class="py-5">
-    <div class="container text-center">
-      <h2 class="text-dark mb-5">Lo que Dicen Nuestros Clientes</h2>
-      <div class="row">
-        <div class="col-md-4">
-          <blockquote class="blockquote">
-            <p>"Encontré un excelente cerrajero en minutos, resolvió mi problema rápido y fue muy amable."</p>
-            <footer class="blockquote-footer">Carlos Mejía, <cite title="Source Title">Cliente satisfecho</cite></footer>
-          </blockquote>
-        </div>
-        <div class="col-md-4">
-          <blockquote class="blockquote">
-            <p>"El electricista que contraté fue puntual y profesional. Instaló las luces sin problemas."</p>
-            <footer class="blockquote-footer">Ana Morales, <cite title="Source Title">Usuario frecuente</cite></footer>
-          </blockquote>
-        </div>
-        <div class="col-md-4">
-          <blockquote class="blockquote">
-            <p>"Servicio impecable. Contacté a un plomero y solucionó una fuga en mi cocina en menos de una hora."</p>
-            <footer class="blockquote-footer">Luis Ortega, <cite title="Source Title">Cliente recurrente</cite></footer>
-          </blockquote>
-        </div>
-      </div>
-    </div>
-  </section>
-  {% endblock testimonials %}
-
-  {% block footer %} 
-  <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-4">
-    <div class="container">
-      <p>&copy; 2024 keyServ - Todos los derechos reservados</p>
-      <a href="#" class="text-white">Términos y Condiciones</a> | <a href="#" class="text-white">Política de Privacidad</a>
-    </div>
-  </footer>
-  {% endblock footer %}
+      </footer>
+      {% endblock %}
     
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+  </body>
 </html>
