@@ -1,15 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Bienvenido {{ request.user.username }}</h1>
+{% extends 'base.html' %}
 
+{% block navbar %}
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+          <h1 class="navbar-brand text-warning" href="#">keyServ</h1>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% endblock %}
 
-    <a href="{% url 'crear_solicitud' %} " type="button">Realizar Solicitud</a>
-    
-</body>
-</html>
+{% block content %}
+  <!-- Main Content -->
+  <main class="container py-5 d-flex flex-column min-vh-100">
+    <section>
+      <h2 class="text-center text-dark mb-4">Bienvenido, {{ user.username }}</h2>
+      <div class="text-center mb-4">
+        <a href="{% url 'crear_solicitud' %}" class="btn btn-warning btn-lg text-white">Solicitar Servicio</a>
+      </div>
+
+      <h4 class="text-dark">Tus Servicios Solicitados</h4>
+      <ul class="list-group mt-3">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Reparación de cerradura
+          <span class="badge bg-primary">En proceso</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Instalación de cerradura
+          <span class="badge bg-success">Completado</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+{% endblock %}
