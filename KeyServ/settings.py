@@ -130,12 +130,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 #Redirigir el login 
-LOGIN_REDIRECT_URL = '/usuarios/dashboard_cliente/'
+LOGIN_REDIRECT_URL = '/usuarios/dashboard/'
 
 #Redirigir el logout a login
 LOGOUT_REDIRECT_URL = '/login/'
 
-PERMISSIONS = [
-    'es_cliente',
-    'es_profesional',
-]

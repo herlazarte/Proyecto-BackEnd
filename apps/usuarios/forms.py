@@ -7,7 +7,6 @@ class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = ['username','email', 'password', 'rol']
-    
 
     #para encriptar la contraseña 
     def save(self, commit=True):
@@ -35,6 +34,7 @@ class ProfesionalForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['especialidad'].required = True
+
 
 class SolicitudForm(forms.ModelForm):
     nombre_servicio = forms.CharField(max_length=100, label="Nombre del Servicio")

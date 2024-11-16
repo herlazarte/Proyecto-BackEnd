@@ -16,19 +16,14 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 # inicio cliente
 class DashboardView(UserPassesTestMixin, TemplateView):
-    template_name = 'dashboard_cliente.html'
-    
-    #solo ingresa a la vista los que tienen el rol de cliente
     def test_func(self):
-        return self.request.user.rol == 'Cliente'
-    
-# inicio profesional
-class DashboardProfesionalView(UserPassesTestMixin, TemplateView):
-    template_name = 'dashboard_profesional.html'
-    
-    #solo ingresa a la vista los que tienen el rol de profesional
-    def test_func(self):
-        return self.request.user.rol == 'Profesional'
+        if self.request.user.rol == 'Cliente':
+            self.template_name = 'dashboard_cliente.html'
+        elif self.request.user.rol == 'Profesional':
+            self.template_name = 'dashboard_profesional.html'
+        else:
+            return False
+        return True
     
 class AltaUserView(CreateView):
     template_name = 'alta_cliente.html'
