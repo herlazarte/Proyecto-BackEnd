@@ -29,9 +29,11 @@ class ClienteForm(forms.ModelForm):
 
 
 class SolicitudForm(forms.ModelForm):
+    nombre_servicio = forms.CharField(max_length=100, label="Nombre del Servicio")
+    descripcion_servicio = forms.CharField(widget=forms.Textarea, label="Descripción del Servicio")
     class Meta:
         model = Solicitud
-        fields = ['cliente', 'servicio', 'fecha_servicio', 'estado']
+        fields = ['cliente', 'fecha_servicio', 'estado']
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)

@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import TemplateView, CreateView
+from apps.servicios.models import Servicio
 from apps.usuarios.models import Cliente, Usuario
 from apps.solicitudes.models import Solicitud
 from apps.usuarios.forms import SolicitudForm
+from apps.servicios.forms import ServicioForm
 from apps.usuarios.forms import UsuarioForm, ClienteForm
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
@@ -23,29 +25,31 @@ class DashboardView(UserPassesTestMixin, TemplateView):
     
     
 class AltaClientesView(CreateView):
-    template_name = 'alta_cliente.html'
-    form_class = UsuarioForm
-    success_url = '/alta_cliente/'  # Puedes redirigir a la página de inicio o donde desees
+    template_name = "crear_solicitud.html"
+    form_class = SolicitudForm
+    success_url = "/crear_solicitud/"
 
     def get_context_data(self, **kwargs):
-        # Añadir el formulario de Cliente al contexto
+        # Añadir el formulario de Servicio al contexto
         context = super().get_context_data(**kwargs)
-        context['cliente_form'] = ClienteForm()  # Añadir formulario de Cliente
+        context['servicio_form'] = ServicioForm()  # Formulario adicional para Servicio
         return context
 
     def form_valid(self, form):
-        # Guardar el Usuario
-        usuario = form.save()
+        # Guardar la Solicitud
+        solicitud = form.save(commit=False)
+        user_cliente = self.request.user.cliente  # Obtener cliente asociado al usuario
+        if not user_cliente:
+            return redirect('/error_cliente_no_asociado/')  # Redirigir si no hay cliente asociado
+        solicitud.cliente = user_cliente  # Asignar el cliente
+        solicitud.save()
 
-        # Crear el Cliente y asociarlo con el Usuario
-        cliente_form = ClienteForm(self.request.POST)
-        if cliente_form.is_valid():
-            cliente = cliente_form.save(commit=False)
-            cliente.usuario = usuario  # Asociar el Usuario con el Cliente
-            cliente.save()
-
-        # Iniciar sesión con el Usuario creado
-        login(self.request, usuario)
+        # Guardar el Servicio asociado a la Solicitud
+        servicio_form = ServicioForm(self.request.POST)
+        if servicio_form.is_valid():
+            servicio = servicio_form.save(commit=False)
+            servicio.solicitud = solicitud  # Asociar el servicio con la solicitud
+            servicio.save()
 
         return super().form_valid(form)
     
@@ -56,22 +60,26 @@ class CrearSolicitudView(CreateView):
     template_name = "crear_solicitud.html"
     success_url = "/crear_solicitud/"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = SolicitudForm(user=self.request.user)  # Pasar el usuario logueado
-        return context
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # Pasar el usuario logueado al formulario
+        return kwargs
 
     def form_valid(self, form):
-        # Asignar el cliente (asumiendo que el usuario tiene un cliente relacionado)
-        user_cliente = self.request.user.cliente  # Obtener el cliente asociado al usuario logueado
-        if user_cliente:  # Verificar si el usuario tiene un cliente relacionado
-            form.instance.cliente = user_cliente  # Asignar el cliente al formulario
-        else:
-            # Si el usuario no tiene un cliente asociado, redirigir a otro lugar o mostrar un mensaje de error
+        # Crear el servicio con los datos del formulario
+        nombre_servicio = form.cleaned_data['nombre_servicio']
+        descripcion_servicio = form.cleaned_data['descripcion_servicio']
+        servicio = Servicio.objects.create(nombre_servicio=nombre_servicio, descripcion=descripcion_servicio)
+
+        # Asignar el cliente al formulario de solicitud
+        user_cliente = self.request.user.cliente
+        if not user_cliente:
             return redirect('/error_cliente_no_asociado/')
 
+        # Asignar el servicio recién creado a la solicitud
+        form.instance.cliente = user_cliente
+        form.instance.servicio = servicio
+
         return super().form_valid(form)
-
-
 class HomeView(TemplateView):
     template_name = "base.html"
