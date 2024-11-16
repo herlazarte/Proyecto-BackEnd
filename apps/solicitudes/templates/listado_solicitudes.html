@@ -1,0 +1,5 @@
+<form action="" method="post">
+    {% for solicitud in solicitudes %}
+        <p>{{ solicitud.cliente }} - {{ solicitud.servicio }} - {{ solicitud.fecha_servicio }} - {{ solicitud.estado }}</p>
+    {% endfor %}
+</form>

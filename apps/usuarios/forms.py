@@ -1,6 +1,6 @@
 from urllib import request
 from django import forms
-from apps.usuarios.models import Cliente, Usuario
+from apps.usuarios.models import Cliente, Usuario, Profesional
 from apps.solicitudes.models import Solicitud
 
 class UsuarioForm(forms.ModelForm):
@@ -27,6 +27,14 @@ class ClienteForm(forms.ModelForm):
 
 
 
+class ProfesionalForm(forms.ModelForm):
+    class Meta:
+        model = Profesional
+        fields = ['especialidad', 'disponibilidad']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['especialidad'].required = True
 
 class SolicitudForm(forms.ModelForm):
     nombre_servicio = forms.CharField(max_length=100, label="Nombre del Servicio")
@@ -41,18 +49,4 @@ class SolicitudForm(forms.ModelForm):
             self.fields['cliente'].initial = user.cliente  # Establecer el cliente relacionado al usuario
             self.fields['cliente'].widget = forms.HiddenInput()  # Hacer el campo oculto para el usuario
 
-        # def __init__(self, *args, **kwargs):
-        #     super().__init__(*args, **kwargs)
-        #     self.fields['cliente'].initial = self.request.user.cliente
-        #     self.fields['estado'].initial = 'Pendiente'
 
-
-
-
-
-
-
-# class ClienteForm(forms.ModelForm):
-#     class Meta:
-#         model = Cliente
-#         fields = ['usuario', 'direccion', 'telefono']

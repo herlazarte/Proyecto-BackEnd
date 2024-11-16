@@ -2,9 +2,15 @@
     {% csrf_token %}
     {{ form.as_p }}  <!-- Formulario para Usuario -->
     
-    <!-- Formulario adicional para Cliente -->
-    <h3>Datos del Cliente</h3>
-    {{ cliente_form.as_p }}
+    {% if form.rol.value == 'Profesional' %}
+        <!-- Formulario adicional para Profesional -->
+        <h3>Datos del Profesional</h3>
+        {{ profesional_form.as_p }}
+    {% elif form.rol.value == 'Cliente' %}
+        <!-- Formulario adicional para Cliente -->
+        <h3>Datos del Cliente</h3>
+        {{ cliente_form.as_p }}
+    {% endif %}
     
     <button type="submit">Registrar</button>
 </form>

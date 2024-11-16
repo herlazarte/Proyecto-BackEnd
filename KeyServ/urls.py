@@ -26,6 +26,6 @@ urlpatterns = [
     path("logout/", aunth_views.LogoutView.as_view()),
     path('', HomeView.as_view(), name='home'),
     # path('servicios/', include('apps.servicios.urls')),
-    # path('solicitudes/', include('apps.solicitudes.urls')),
+    path('solicitudes/', include('apps.solicitudes.urls')),
     # path('turnos/', include('apps.turnos.urls')),
 ]
