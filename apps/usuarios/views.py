@@ -25,35 +25,33 @@ class DashboardView(UserPassesTestMixin, TemplateView):
     
     
 class AltaClientesView(CreateView):
-    template_name = "crear_solicitud.html"
-    form_class = SolicitudForm
-    success_url = "/crear_solicitud/"
+    template_name = 'alta_cliente.html'
+    form_class = UsuarioForm
+    success_url = '/alta_cliente/'  # Puedes redirigir a la página de inicio o donde desees
 
     def get_context_data(self, **kwargs):
-        # Añadir el formulario de Servicio al contexto
+        # Añadir el formulario de Cliente al contexto
         context = super().get_context_data(**kwargs)
-        context['servicio_form'] = ServicioForm()  # Formulario adicional para Servicio
+        context['cliente_form'] = ClienteForm()  # Añadir formulario de Cliente
         return context
 
     def form_valid(self, form):
-        # Guardar la Solicitud
-        solicitud = form.save(commit=False)
-        user_cliente = self.request.user.cliente  # Obtener cliente asociado al usuario
-        if not user_cliente:
-            return redirect('/error_cliente_no_asociado/')  # Redirigir si no hay cliente asociado
-        solicitud.cliente = user_cliente  # Asignar el cliente
-        solicitud.save()
+        # Guardar el Usuario
+        usuario = form.save()
 
-        # Guardar el Servicio asociado a la Solicitud
-        servicio_form = ServicioForm(self.request.POST)
-        if servicio_form.is_valid():
-            servicio = servicio_form.save(commit=False)
-            servicio.solicitud = solicitud  # Asociar el servicio con la solicitud
-            servicio.save()
+        # Crear el Cliente y asociarlo con el Usuario
+        cliente_form = ClienteForm(self.request.POST)
+        if cliente_form.is_valid():
+            cliente = cliente_form.save(commit=False)
+            cliente.usuario = usuario  # Asociar el Usuario con el Cliente
+            cliente.save()
+
+        # Iniciar sesión con el Usuario creado
+        login(self.request, usuario)
 
         return super().form_valid(form)
     
-
+########## ABM SOLICITUDES ############
 class CrearSolicitudView(CreateView):
     model = Solicitud
     form_class = SolicitudForm
@@ -81,5 +79,8 @@ class CrearSolicitudView(CreateView):
         form.instance.servicio = servicio
 
         return super().form_valid(form)
+
+
+########## ABM SOLICITUDES ############
 class HomeView(TemplateView):
     template_name = "base.html"
