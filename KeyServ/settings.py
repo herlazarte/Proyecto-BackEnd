@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.servicios',
     'apps.solicitudes',
     'apps.autenticacion',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

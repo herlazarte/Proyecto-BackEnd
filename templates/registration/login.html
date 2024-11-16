@@ -1,16 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
-</head>
-<body>
-    <h2>Iniciar Sesión</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Iniciar Sesión</button>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<!-- Login Form Section -->
+<div class="container py-5 flex-grow-1">
+  <div class="row justify-content-center align-items-center">
+    <!-- Text Section (Now on the Left) -->
+    <div class="col-md-6 col-lg-5">
+      <section class="bg-light h-100 d-flex flex-column justify-content-center text-center">
+        <h2 class="text-dark">¿Necesitas un profesional para tu hogar o negocio?</h2>
+        <p class="lead text-dark">En <span class="text-warning">keyServ</span> encontrarás cerrajeros, electricistas, plomeros y mucho más. Todo a solo un clic de distancia. ¡Confía en los expertos!</p>
+      </section>
+    </div>
+
+    <!-- Form Column (Now on the Right) -->
+    <div class="col-md-6 col-lg-5">
+      <div class="card border-0 shadow-lg">
+        <div class="card-body p-5">
+          <h2 class="text-center text-dark mb-4">Iniciar Sesión en <span class="text-warning">keyServ</span></h2>
+
+          <!-- Formulario de inicio de sesión -->
+          <form method="post">
+            {% csrf_token %}
+
+            <!-- Mostrar errores generales -->
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+              </div>
+            {% endif %}
+
+            <!-- Campo de usuario -->
+            <div class="mb-3">
+              <label for="id_username" class="form-label text-dark">Nombre de usuario</label>
+              {{ form.username|add_class:"form-control" }}
+            </div>
+
+            <!-- Campo de contraseña -->
+            <div class="mb-3">
+              <label for="id_password" class="form-label text-dark">Contraseña</label>
+              {{ form.password|add_class:"form-control" }}
+            </div>
+
+            <!-- Recordar contraseña y enlace de recuperación -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="rememberMe">
+                <label class="form-check-label text-dark" for="rememberMe">Recuérdame</label>
+              </div>
+              <a href="#" class="text-decoration-none text-warning">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <!-- Botón de inicio de sesión -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary text-white">Iniciar Sesión</button>
+            </div>
+          </form>
+
+          <!-- Enlace para registrarse -->
+          <div class="text-center mt-4">
+            <p class="text-dark">¿No tienes una cuenta? <a href="{% url 'alta_cliente' %}" class="text-warning text-decoration-none">Regístrate aquí</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
