@@ -10,6 +10,7 @@ from apps.usuarios.forms import UsuarioForm, ClienteForm
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.urls import reverse_lazy
 
 
 
@@ -67,37 +68,62 @@ class AltaUserView(CreateView):
     
 ########## ABM SOLICITUDES ############
 class CrearSolicitudView(CreateView):
-    template_name = 'alta_cliente.html'
-    form_class = UsuarioForm
-    success_url = '/dashboard_cliente/'  # Redirección por defecto (para clientes)
-
-    def get_context_data(self, **kwargs):
-        # Añadir el formulario de Cliente al contexto
-        context = super().get_context_data(**kwargs)
-        context['cliente_form'] = ClienteForm()  # Añadir formulario de Cliente
-        return context
+    template_name = 'crear_solicitud.html'
+    form_class = SolicitudForm
 
     def form_valid(self, form):
-        # Guardar el Usuario
-        usuario = form.save()
+        # Crear la Solicitud asociada al usuario autenticado
+        solicitud = form.save(commit=False)
+        solicitud.usuario = self.request.user  # Asocia la solicitud al usuario logueado
+        solicitud.save()
 
-        # Crear el Cliente y asociarlo con el Usuario
-        cliente_form = ClienteForm(self.request.POST)
-        if cliente_form.is_valid():
-            cliente = cliente_form.save(commit=False)
-            cliente.usuario = usuario  # Asociar el Usuario con el Cliente
-            cliente.save()
+        # Verifica si el cliente ya existe o se crea uno nuevo
+        cliente, created = Cliente.objects.get_or_create(usuario=self.request.user)
+        solicitud.cliente = cliente
+        solicitud.save()
 
-        # Iniciar sesión con el Usuario creado
-        login(self.request, usuario)
-
-        # Redirigir según el rol del Usuario
-        if usuario.rol == 'Profesional':  # Si el Usuario es profesional
-            return redirect('/dashboard_profesional/')  # Redirección para profesionales
-        else:
-            return redirect('/dashboard_cliente/')  # Redirección para clientes
+        # Redirige a la página deseada
+        return redirect('/')
 
 
+##### ALta Solicitud ######
+class CrearSolicitudView(CreateView):
+    template_name = 'crear_solicitud.html'
+    form_class = SolicitudForm
+    success_url = reverse_lazy('crear_solicitud')  # Cambia 'inicio' por la URL adecuada
+
+    def get_form_kwargs(self):
+        """
+        Pasar el usuario autenticado al formulario.
+        """
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+
+        solicitud = form.save(commit=False)
+        solicitud.cliente = self.request.user.cliente
+
+        # Crear siempre un nuevo Servicio para cada solicitud
+        servicio = Servicio.objects.create(
+            nombre_servicio=form.cleaned_data['nombre_servicio'],
+            descripcion=form.cleaned_data['descripcion_servicio']
+        )
+        solicitud.servicio = servicio
+        solicitud.save()
+        return redirect(self.success_url)
+    
 ########## ABM SOLICITUDES ############
+
+
+
+
+
+
+
+
+
+
 class HomeView(TemplateView):
     template_name = "base.html"
