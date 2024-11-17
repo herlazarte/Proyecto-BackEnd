@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView
 from apps.servicios.models import Servicio
 from apps.usuarios.models import Cliente, Usuario
 from apps.solicitudes.models import Solicitud
@@ -67,23 +67,17 @@ class AltaUserView(CreateView):
 
     
 ########## ABM SOLICITUDES ############
-class CrearSolicitudView(CreateView):
-    template_name = 'crear_solicitud.html'
-    form_class = SolicitudForm
 
-    def form_valid(self, form):
-        # Crear la Solicitud asociada al usuario autenticado
-        solicitud = form.save(commit=False)
-        solicitud.usuario = self.request.user  # Asocia la solicitud al usuario logueado
-        solicitud.save()
+class ListarSolicitudesView(ListView):
+    template_name = 'listar_solicitudes.html'
+    model = Solicitud
+    context_object_name = 'solicitudes'
 
-        # Verifica si el cliente ya existe o se crea uno nuevo
-        cliente, created = Cliente.objects.get_or_create(usuario=self.request.user)
-        solicitud.cliente = cliente
-        solicitud.save()
-
-        # Redirige a la página deseada
-        return redirect('/')
+    def get_queryset(self):
+        """
+        Filtrar las solicitudes del cliente autenticado.
+        """
+        return Solicitud.objects.filter(cliente=self.request.user.cliente)
 
 
 ##### ALta Solicitud ######
@@ -113,6 +107,39 @@ class CrearSolicitudView(CreateView):
         solicitud.servicio = servicio
         solicitud.save()
         return redirect(self.success_url)
+    
+
+class ActualizarSolicitudView(UpdateView):
+    template_name = 'actualizar_solicitud.html'
+    model = Solicitud
+    form_class = SolicitudForm
+    success_url = reverse_lazy('listar_solicitudes')  # Redirige a la lista de solicitudes
+
+    def get_form_kwargs(self):
+        """
+        Pasar el usuario autenticado al formulario.
+        """
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        solicitud = form.save(commit=False)
+        solicitud.cliente = self.request.user.cliente  # Asegurar que el cliente no cambie
+        solicitud.save()
+        return redirect(self.success_url)
+
+class EliminarSolicitudView(DeleteView):
+    template_name = 'eliminar_solicitud.html'
+    model = Solicitud
+    success_url = reverse_lazy('listar_solicitudes')  # Redirige a la lista de solicitudes
+
+    def get_queryset(self):
+        """
+        Limitar las solicitudes que puede eliminar al cliente autenticado.
+        """
+        return Solicitud.objects.filter(cliente=self.request.user.cliente)
+
     
 ########## ABM SOLICITUDES ############
 

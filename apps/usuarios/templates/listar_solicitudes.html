@@ -1,0 +1,24 @@
+<h1>Tus Solicitudes</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Servicio</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for solicitud in solicitudes %}
+        <tr>
+            <td>{{ solicitud.servicio.nombre_servicio }}</td>
+            <td>{{ solicitud.fecha_servicio }}</td>
+            <td>{{ solicitud.estado }}</td>
+            <td>
+                <a href="{% url 'actualizar_solicitud' solicitud.id %}">Editar</a>
+                <a href="{% url 'eliminar_solicitud' solicitud.id %}">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
