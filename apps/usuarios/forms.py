@@ -36,6 +36,10 @@ class ProfesionalForm(forms.ModelForm):
         self.fields['especialidad'].required = True
 
 
+
+
+
+
 class SolicitudForm(forms.ModelForm):
     nombre_servicio = forms.CharField(max_length=100, label="Nombre del Servicio")
     descripcion_servicio = forms.CharField(widget=forms.Textarea, label="Descripción del Servicio")

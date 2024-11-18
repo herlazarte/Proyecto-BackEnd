@@ -1,5 +1,24 @@
-<form action="" method="post">
-    {% for solicitud in solicitudes %}
-        <p>{{ solicitud.cliente }} - {{ solicitud.servicio }} - {{ solicitud.fecha_servicio }} - {{ solicitud.estado }}</p>
-    {% endfor %}
-</form>
+<h2>Listado de Solicitudes</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Servicio</th>
+            <th>Cliente</th>
+            <th>Fecha Solicitud</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for solicitud in solicitudes %}
+        <tr>
+            <td>{{ solicitud.servicio }}</td>
+            <td>{{ solicitud.cliente }}</td>
+            <td>{{ solicitud.fecha_servicio }}</td>
+            <td>
+                <a href="{% url 'asignar_turno' solicitud.id %}">Asignar Turno</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+<h2>Registro de Usuario</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <!-- Formulario para Usuario -->
+    {{ form.as_p }}  
+
+    <!-- Mostrar el formulario de Profesional si el rol es 'Profesional' -->
+    {% if form.rol.value == 'Profesional' %}
+        <div>
+            <h3>Datos del Profesional</h3>
+            {{ profesional_form.as_p }}
+        </div>
+    {% endif %}
+
+    <!-- Mostrar el formulario de Cliente si el rol es 'Cliente' -->
+    {% if form.rol.value == 'Cliente' %}
+        <div>
+            <h3>Datos del Cliente</h3>
+            {{ cliente_form.as_p }}
+        </div>
+    {% endif %}
+    
+    <button type="submit">Registrar</button>
+</form>
+

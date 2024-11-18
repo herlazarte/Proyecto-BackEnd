@@ -6,7 +6,7 @@ class Usuario(AbstractUser):
         ('Cliente', 'Cliente'),
         ('Profesional', 'Profesional')
     ]
-    rol = models.CharField(max_length=12, choices=ROLES)
+    rol = models.CharField(max_length=20, choices=ROLES)
     
     # Otros campos específicos de usuario como nombre y email ya están en AbstractUser
 

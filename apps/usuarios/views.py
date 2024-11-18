@@ -13,9 +13,44 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 
 
+class AltaUserView(CreateView):
+    template_name = 'alta_user.html'
+    form_class = UsuarioForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cliente_form'] = ClienteForm()
+        context['profesional_form'] = ProfesionalForm()
+        return context
 
-# inicio cliente
+    def form_valid(self, form):
+        # Guardamos el usuario
+        usuario = form.save()
+
+        # Si es cliente, guardamos los datos del cliente
+        if usuario.rol == 'cliente':
+            cliente_form = ClienteForm(self.request.POST)
+            if cliente_form.is_valid():
+                cliente = cliente_form.save(commit=False)
+                cliente.usuario = usuario
+                cliente.save()
+            success_url = '/dashboard_cliente/'
+
+        # Si es profesional, guardamos los datos del profesional
+        elif usuario.rol == 'profesional':
+            profesional_form = ProfesionalForm(self.request.POST)
+            if profesional_form.is_valid():
+                profesional = profesional_form.save(commit=False)
+                profesional.usuario = usuario
+                profesional.save()
+            success_url = '/dashboard_profesional/'
+
+        # Iniciar sesión y redirigir
+        login(self.request, usuario)
+        return redirect(success_url)
+    
+
+# inicio
 class DashboardView(UserPassesTestMixin, TemplateView):
     def test_func(self):
         if self.request.user.rol == 'Cliente':
@@ -26,44 +61,7 @@ class DashboardView(UserPassesTestMixin, TemplateView):
             return False
         return True
     
-class AltaUserView(CreateView):
-    template_name = 'alta_cliente.html'
-    form_class = UsuarioForm
 
-    def get_context_data(self, **kwargs):
-        # Añadir los formularios al contexto
-        context = super().get_context_data(**kwargs)
-        context['cliente_form'] = ClienteForm()  # Formulario de Cliente
-        context['profesional_form'] = ProfesionalForm()  # Formulario de Profesional
-        return context
-
-    def form_valid(self, form):
-        # Guardar el usuario
-        usuario = form.save()
-
-        # Validar si es cliente o profesional
-        if usuario.rol == 'cliente':  # Asegúrate de que 'rol' sea un campo válido en el modelo Usuario
-            cliente_form = ClienteForm(self.request.POST)
-            if cliente_form.is_valid():
-                cliente = cliente_form.save(commit=False)
-                cliente.usuario = usuario
-                cliente.save()
-            success_url = '/dashboard_cliente/'
-        elif usuario.rol == 'profesional':
-            profesional_form = ProfesionalForm(self.request.POST)
-            if profesional_form.is_valid():
-                profesional = profesional_form.save(commit=False)
-                profesional.usuario = usuario
-                profesional.save()
-            success_url = '/dashboard_profesional/'
-        else:
-            # Si el rol no está definido, redirigir a una página de error o predeterminada
-            success_url = '/'
-
-        # Iniciar sesión con el usuario creado
-        login(self.request, usuario)
-        
-        return redirect(success_url)
 
     
 ########## ABM SOLICITUDES ############

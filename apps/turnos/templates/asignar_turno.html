@@ -1,0 +1,11 @@
+<h2>Asignar Turno para la Solicitud de {{ solicitud.cliente }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <p><strong>Servicio:</strong> {{ solicitud.servicio }}</p>
+    <p><strong>Cliente:</strong> {{ solicitud.cliente }}</p>
+    
+    <button type="submit">Asignar Turno</button>
+</form>

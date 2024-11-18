@@ -9,7 +9,7 @@ class Turno(models.Model):
     ]
 
     profesional = models.ForeignKey(Profesional, on_delete=models.CASCADE)
-    solicitud = models.OneToOneField(Solicitud, on_delete=models.CASCADE)
+    solicitud = models.ForeignKey(Solicitud, on_delete=models.CASCADE)
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES)
     fecha_turno = models.DateField()
 
