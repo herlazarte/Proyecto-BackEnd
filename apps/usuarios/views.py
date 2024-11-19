@@ -126,12 +126,22 @@ class ActualizarSolicitudView(UpdateView):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+    
 
     def form_valid(self, form):
         solicitud = form.save(commit=False)
-        solicitud.cliente = self.request.user.cliente  # Asegurar que el cliente no cambie
-        solicitud.save()
-        return redirect(self.success_url)
+
+        # Actualizar el Servicio
+        servicio = solicitud.servicio
+        servicio.nombre_servicio = form.cleaned_data['nombre_servicio']
+        servicio.descripcion = form.cleaned_data['descripcion_servicio']
+        servicio.save()
+
+        return super().form_valid(form)
+  
+  
+
+
 
 class EliminarSolicitudView(DeleteView):
     template_name = 'eliminar_solicitud.html'
