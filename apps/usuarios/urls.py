@@ -6,9 +6,9 @@ urlpatterns = [
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('AltaUser/', AltaUserView.as_view(), name='AltaUser'),
     path('crear_solicitud/', CrearSolicitudView.as_view(), name='crear_solicitud'),
-     path('actualizar_solicitud/<int:pk>/', ActualizarSolicitudView.as_view(), name='actualizar_solicitud'),
+    path('actualizar_solicitud/<int:pk>/', ActualizarSolicitudView.as_view(), name='actualizar_solicitud'),
     path('eliminar_solicitud/<int:pk>/', EliminarSolicitudView.as_view(), name='eliminar_solicitud'),
-    path('dashboard_cliente/', DashboardView.as_view(), name='dashboard_cliente'),
+    
 
 
     

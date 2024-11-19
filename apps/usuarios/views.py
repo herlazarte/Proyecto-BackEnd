@@ -11,44 +11,57 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
+from django.contrib.auth.hashers import make_password
+
 
 
 class AltaUserView(CreateView):
     template_name = 'alta_user.html'
     form_class = UsuarioForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['cliente_form'] = ClienteForm()
-        context['profesional_form'] = ProfesionalForm()
-        return context
+    
+    def get(self, request, *args, **kwargs):
+        usuario_form = UsuarioForm()
+        cliente_form = ClienteForm()
+        profesional_form = ProfesionalForm()
+        return self.render_to_response({
+            'usuario_form': usuario_form,
+            'cliente_form': cliente_form,
+            'profesional_form': profesional_form,
+            'mostrar_cliente': False,
+            'mostrar_profesional': False,
+        })
 
-    def form_valid(self, form):
-        # Guardamos el usuario
-        usuario = form.save()
+    def post(self, request, *args, **kwargs):
+        usuario_form = UsuarioForm(request.POST)
+        cliente_form = ClienteForm(request.POST)
+        profesional_form = ProfesionalForm(request.POST)
 
-        # Si es cliente, guardamos los datos del cliente
-        if usuario.rol == 'cliente':
-            cliente_form = ClienteForm(self.request.POST)
-            if cliente_form.is_valid():
+        if usuario_form.is_valid():
+            usuario = usuario_form.save(commit=False)
+            rol = usuario_form.cleaned_data['rol']
+
+            if rol == 'Cliente' and cliente_form.is_valid():
+                usuario.save()
                 cliente = cliente_form.save(commit=False)
                 cliente.usuario = usuario
                 cliente.save()
-            success_url = '/dashboard_cliente/'
-
-        # Si es profesional, guardamos los datos del profesional
-        elif usuario.rol == 'profesional':
-            profesional_form = ProfesionalForm(self.request.POST)
-            if profesional_form.is_valid():
+                #return redirect('dashboard')  # Redirige tras el éxito
+            elif rol == 'Profesional' and profesional_form.is_valid():
+                usuario.save()
                 profesional = profesional_form.save(commit=False)
                 profesional.usuario = usuario
                 profesional.save()
-            success_url = '/dashboard_profesional/'
+                #return redirect('dashboard')  # Redirige tras el éxito
 
-        # Iniciar sesión y redirigir
-        login(self.request, usuario)
-        return redirect(success_url)
-    
+        # Si hay errores, muestra los formularios con validación fallida
+        return self.render_to_response({
+            'usuario_form': usuario_form,
+            'cliente_form': cliente_form,
+            'profesional_form': profesional_form,
+            'mostrar_cliente': usuario_form.cleaned_data.get('rol') == 'Cliente',
+            'mostrar_profesional': usuario_form.cleaned_data.get('rol') == 'Profesional',
+        })
 
 # inicio
 class DashboardView(UserPassesTestMixin, TemplateView):

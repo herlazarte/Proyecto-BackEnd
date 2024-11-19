@@ -1,63 +1,28 @@
-<h2>Registro de Usuario</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dar de alta usuario</title>
+</head>
+<body>
+    <h1>Dar de alta usuario</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <h2>Información de usuario</h2>
+        {{ usuario_form.as_p }}
 
-<form method="POST">
-    {% csrf_token %}
-    <!-- Formulario para Usuario -->
-    {{ form.as_p }}  
-
-    <!-- Mostrar el formulario de Profesional si el rol es 'Profesional' -->
-    {% if form.rol.value == 'Profesional' %}
-        <div>
-            <h3>Datos del Profesional</h3>
-            {{ profesional_form.as_p }}
-        </div>
-    {% endif %}
-
-    <!-- Mostrar el formulario de Cliente si el rol es 'Cliente' -->
-    {% if form.rol.value == 'Cliente' %}
-        <div>
-            <h3>Datos del Cliente</h3>
+        {% if mostrar_cliente %}
+            <h2>Información de cliente</h2>
             {{ cliente_form.as_p }}
-        </div>
-    {% endif %}
-    
-    <button type="submit">Registrar</button>
-</form>
+        {% endif %}
 
-<!-- <h2>Registro de Usuario</h2>
+        {% if mostrar_profesional %}
+            <h2>Información de profesional</h2>
+            {{ profesional_form.as_p }}
+        {% endif %}
 
-<form method="POST">
-    {% csrf_token %}
-    <!-- Formulario para Usuario -->
-    {{ form.as_p }}  
-    
-    <div id="formulario-profesional" style="display: none;">
-        <!-- Formulario adicional para Profesional -->
-        <h3>Datos del Profesional</h3>
-        {{ profesional_form.as_p }}
-    </div>
-
-    <div id="formulario-cliente" style="display: none;">
-        <!-- Formulario adicional para Cliente -->
-        <h3>Datos del Cliente</h3>
-        {{ cliente_form.as_p }}
-    </div>
-    
-    <button type="submit">Registrar</button>
-</form>
-
-<script>
-    document.getElementById('id_rol').addEventListener('change', function() {
-        var rol = this.value;
-        if (rol == 'Profesional') {
-            document.getElementById('formulario-profesional').style.display = 'block';
-            document.getElementById('formulario-cliente').style.display = 'none';
-        } else if (rol == 'Cliente') {
-            document.getElementById('formulario-profesional').style.display = 'none';
-            document.getElementById('formulario-cliente').style.display = 'block';
-        } else {
-            document.getElementById('formulario-profesional').style.display = 'none';
-            document.getElementById('formulario-cliente').style.display = 'none';
-        }
-    });
-</script> -->
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>
