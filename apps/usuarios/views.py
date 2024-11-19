@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView
 from apps.servicios.models import Servicio
-from apps.usuarios.models import Cliente, Usuario
+from apps.usuarios.models import Cliente, Profesional, Usuario
 from apps.solicitudes.models import Solicitud
 from apps.usuarios.forms import ProfesionalForm, SolicitudForm
 from apps.servicios.forms import ServicioForm
@@ -15,53 +15,74 @@ from django.contrib.auth.hashers import make_password
 
 
 
-class AltaUserView(CreateView):
-    template_name = 'alta_user.html'
-    form_class = UsuarioForm
+class ClienteCreateView(CreateView):
+    model = Cliente
+    template_name = 'cliente_form.html'
+    form_class = ClienteForm
+    success_url = reverse_lazy('home')  # Cambia 'home' por la URL deseada
 
-    
-    def get(self, request, *args, **kwargs):
-        usuario_form = UsuarioForm()
-        cliente_form = ClienteForm()
-        profesional_form = ProfesionalForm()
-        return self.render_to_response({
-            'usuario_form': usuario_form,
-            'cliente_form': cliente_form,
-            'profesional_form': profesional_form,
-            'mostrar_cliente': False,
-            'mostrar_profesional': False,
-        })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'usuario_form' not in context:
+            context['usuario_form'] = UsuarioForm()
+        return context
 
-    def post(self, request, *args, **kwargs):
-        usuario_form = UsuarioForm(request.POST)
-        cliente_form = ClienteForm(request.POST)
-        profesional_form = ProfesionalForm(request.POST)
-
+    def form_valid(self, form):
+        usuario_form = UsuarioForm(self.request.POST)
         if usuario_form.is_valid():
             usuario = usuario_form.save(commit=False)
-            rol = usuario_form.cleaned_data['rol']
+            usuario.rol = 'cliente'  # Asigna el rol automáticamente
+            usuario.save()
+            cliente = form.save(commit=False)
+            cliente.usuario = usuario
+            cliente.save()
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
 
-            if rol == 'Cliente' and cliente_form.is_valid():
-                usuario.save()
-                cliente = cliente_form.save(commit=False)
-                cliente.usuario = usuario
-                cliente.save()
-                #return redirect('dashboard')  # Redirige tras el éxito
-            elif rol == 'Profesional' and profesional_form.is_valid():
-                usuario.save()
-                profesional = profesional_form.save(commit=False)
-                profesional.usuario = usuario
-                profesional.save()
-                #return redirect('dashboard')  # Redirige tras el éxito
+class ProfesionalCreateView(CreateView):
+    model = Profesional
+    template_name = 'profesional_form.html'
+    form_class = ProfesionalForm
+    success_url = reverse_lazy('home')  # Cambia 'home' por la URL deseada
 
-        # Si hay errores, muestra los formularios con validación fallida
-        return self.render_to_response({
-            'usuario_form': usuario_form,
-            'cliente_form': cliente_form,
-            'profesional_form': profesional_form,
-            'mostrar_cliente': usuario_form.cleaned_data.get('rol') == 'Cliente',
-            'mostrar_profesional': usuario_form.cleaned_data.get('rol') == 'Profesional',
-        })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'usuario_form' not in context:
+            context['usuario_form'] = UsuarioForm()
+        return context
+
+    def form_valid(self, form):
+        usuario_form = UsuarioForm(self.request.POST)
+        if usuario_form.is_valid():
+            usuario = usuario_form.save(commit=False)
+            usuario.rol = 'profesional'  # Asigna el rol automáticamente
+            usuario.save()
+            profesional = form.save(commit=False)
+            profesional.usuario = usuario
+            profesional.save()
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # inicio
 class DashboardView(UserPassesTestMixin, TemplateView):
