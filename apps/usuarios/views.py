@@ -88,7 +88,7 @@ class DashboardView(UserPassesTestMixin, TemplateView):
 class CrearSolicitudView(CreateView):
     template_name = 'crear_solicitud.html'
     form_class = SolicitudForm
-    success_url = reverse_lazy('crear_solicitud')  # Cambia 'inicio' por la URL adecuada
+    success_url = reverse_lazy('dashboard_cliente')  # Cambia 'inicio' por la URL adecuada
 
     def get_form_kwargs(self):
         """

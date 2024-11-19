@@ -23,58 +23,90 @@
   <!-- Main Content -->
   <main class="container py-5 d-flex flex-column min-vh-100">
     <section>
-      <h2 class="text-center text-dark mb-4">Bienvenido, {{ user.username }}</h2>
-      <div class="text-center mb-4">
-        <a href="{% url 'crear_solicitud' %}" class="btn btn-warning btn-lg text-white">Solicitar Servicio</a>
-      </div>
-  
-      <h4 class="text-dark">Tus Servicios Solicitados</h4>
+        <h2 class="text-center text-dark mb-4">Bienvenido, {{ user.username }}</h2>
+        <div class="text-center mb-4">
+            <a href="{% url 'crear_solicitud' %}" class="btn btn-warning btn-lg text-white">Solicitar Servicio</a>
+        </div>
 
-    {% comment %} <a href="{% url 'listar_solicitudes' %}"> Ver Solicitudes</a> {% endcomment %}
-  
-      <div class="table-responsive mt-3">
-        <table class="table table-bordered table-hover">
-          <thead class="bg-dark text-white">
-            <tr>
-              <th>Nombre del Servicio</th>
-              <th>Fecha</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for solicitud in solicitudes %}
-            <tr>
-              <td>{{ solicitud.servicio.nombre_servicio }}</td>
-              <td>{{ solicitud.fecha_servicio }}</td>
-              <td>
-                <span class="badge 
-                  {% if solicitud.estado == 'Pendiente' %}bg-primary
-                  {% elif solicitud.estado == 'Aceptado' %}bg-success
-                  {% elif solicitud.estado == 'Rechazado' %}bg-danger
-                  {% else %}bg-secondary
-                  {% endif %}
-                ">
-                  {{ solicitud.estado }}
-                </span>
-              </td>
-              <td class="text-center">
-                <a href="{% url 'actualizar_solicitud' solicitud.id %}" class="btn btn-outline-primary btn-sm me-2">
-                  <i class="bi bi-pencil"></i> Editar
-                </a>
-                <a href="{% url 'eliminar_solicitud' solicitud.id %}" class="btn btn-outline-danger btn-sm">
-                  <i class="bi bi-trash"></i> Eliminar
-                </a>
-              </td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="4" class="text-center">No tienes servicios solicitados.</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+        <h4 class="text-dark">Tus Servicios Solicitados</h4>
+
+        <div class="table-responsive mt-3">
+            <table class="table table-bordered table-hover">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th>Nombre del Servicio</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solicitud in solicitudes %}
+                    <tr>
+                        <td>{{ solicitud.servicio.nombre_servicio }}</td>
+                        <td>{{ solicitud.fecha_servicio }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if solicitud.estado == 'Pendiente' %}bg-primary
+                                {% elif solicitud.estado == 'Aceptado' %}bg-success
+                                {% elif solicitud.estado == 'Rechazado' %}bg-danger
+                                {% else %}bg-secondary{% endif %}">
+                                {{ solicitud.estado }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'actualizar_solicitud' solicitud.id %}" class="btn btn-outline-primary btn-sm me-2">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete({{ solicitud.id }})">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No tienes servicios solicitados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </section>
-  </main>  
+</main>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar esta solicitud? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  function confirmDelete(solicitudId) {
+    // Cambiar la acción del formulario con la URL dinámica
+    const deleteForm = document.getElementById('deleteForm');
+    deleteForm.action = `/usuarios/eliminar_solicitud/${solicitudId}/`;
+ // Construye la URL con el ID de la solicitud
+
+    // Mostrar el modal
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+</script>
+
 {% endblock %}
