@@ -42,7 +42,7 @@ class AsignarTurnoView(FormView):
 
         # Redirigir al detalle del turno
         messages.success(self.request, "Turno asignado correctamente.")
-        return redirect('asignar_turno')
+        return redirect('/')
 
     def form_invalid(self, form):
         solicitud = get_object_or_404(Solicitud, id=self.kwargs['solicitud_id'])
