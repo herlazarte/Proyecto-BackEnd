@@ -101,7 +101,7 @@ class DashboardView(UserPassesTestMixin, TemplateView):
 class CrearSolicitudView(CreateView):
     template_name = 'crear_solicitud.html'
     form_class = SolicitudForm
-    success_url = reverse_lazy('dashboard_cliente')  # Cambia 'inicio' por la URL adecuada
+    success_url = reverse_lazy('dashboard')  # Cambia 'inicio' por la URL adecuada
 
     def get_form_kwargs(self):
         """
@@ -130,7 +130,7 @@ class ActualizarSolicitudView(UpdateView):
     template_name = 'actualizar_solicitud.html'
     model = Solicitud
     form_class = SolicitudForm
-    success_url = reverse_lazy('dashboard_cliente')  # Redirige a la lista de solicitudes
+    success_url = reverse_lazy('dashboard')  # Redirige a la lista de solicitudes
 
     def get_form_kwargs(self):
         """
@@ -159,7 +159,7 @@ class ActualizarSolicitudView(UpdateView):
 class EliminarSolicitudView(DeleteView):
     template_name = 'eliminar_solicitud.html'
     model = Solicitud
-    success_url = reverse_lazy('dashboard_cliente')  # Redirige a la lista de solicitudes
+    success_url = reverse_lazy('dashboard')  # Redirige a la lista de solicitudes
 
     def get_queryset(self):
         """
