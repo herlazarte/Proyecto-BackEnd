@@ -61,21 +61,27 @@ class DashboardView(UserPassesTestMixin, TemplateView):
             return False
         return True
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.rol == 'Cliente':
+            # Agregar las solicitudes del cliente autenticado al contexto
+            context['solicitudes'] = Solicitud.objects.filter(cliente=self.request.user.cliente)
+        return context
 
 
     
 ########## ABM SOLICITUDES ############
 
-class ListarSolicitudesView(ListView):
-    template_name = 'listar_solicitudes.html'
-    model = Solicitud
-    context_object_name = 'solicitudes'
+# class ListarSolicitudesView(ListView):
+#     template_name = 'listar_solicitudes.html'
+#     model = Solicitud
+#     context_object_name = 'solicitudes'
 
-    def get_queryset(self):
-        """
-        Filtrar las solicitudes del cliente autenticado.
-        """
-        return Solicitud.objects.filter(cliente=self.request.user.cliente)
+#     def get_queryset(self):
+#         """
+#         Filtrar las solicitudes del cliente autenticado.
+#         """
+#         return Solicitud.objects.filter(cliente=self.request.user.cliente)
 
 
 ##### ALta Solicitud ######
@@ -111,7 +117,7 @@ class ActualizarSolicitudView(UpdateView):
     template_name = 'actualizar_solicitud.html'
     model = Solicitud
     form_class = SolicitudForm
-    success_url = reverse_lazy('listar_solicitudes')  # Redirige a la lista de solicitudes
+    success_url = reverse_lazy('dashboard_cliente')  # Redirige a la lista de solicitudes
 
     def get_form_kwargs(self):
         """
@@ -130,7 +136,7 @@ class ActualizarSolicitudView(UpdateView):
 class EliminarSolicitudView(DeleteView):
     template_name = 'eliminar_solicitud.html'
     model = Solicitud
-    success_url = reverse_lazy('listar_solicitudes')  # Redirige a la lista de solicitudes
+    success_url = reverse_lazy('dashboard_cliente')  # Redirige a la lista de solicitudes
 
     def get_queryset(self):
         """
