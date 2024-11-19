@@ -24,3 +24,40 @@
     <button type="submit">Registrar</button>
 </form>
 
+<!-- <h2>Registro de Usuario</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <!-- Formulario para Usuario -->
+    {{ form.as_p }}  
+    
+    <div id="formulario-profesional" style="display: none;">
+        <!-- Formulario adicional para Profesional -->
+        <h3>Datos del Profesional</h3>
+        {{ profesional_form.as_p }}
+    </div>
+
+    <div id="formulario-cliente" style="display: none;">
+        <!-- Formulario adicional para Cliente -->
+        <h3>Datos del Cliente</h3>
+        {{ cliente_form.as_p }}
+    </div>
+    
+    <button type="submit">Registrar</button>
+</form>
+
+<script>
+    document.getElementById('id_rol').addEventListener('change', function() {
+        var rol = this.value;
+        if (rol == 'Profesional') {
+            document.getElementById('formulario-profesional').style.display = 'block';
+            document.getElementById('formulario-cliente').style.display = 'none';
+        } else if (rol == 'Cliente') {
+            document.getElementById('formulario-profesional').style.display = 'none';
+            document.getElementById('formulario-cliente').style.display = 'block';
+        } else {
+            document.getElementById('formulario-profesional').style.display = 'none';
+            document.getElementById('formulario-cliente').style.display = 'none';
+        }
+    });
+</script> -->
