@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container py-5">
-    <h2 class="text-center mb-4">Actualizar Solicitud</h2>
+    <h2 class="text-center mb-4">Editar Solicitud</h2>
     <form method="post" class="bg-light p-4 rounded shadow-sm">
         {% csrf_token %}
 
@@ -37,7 +37,7 @@
         </div>
         {% endfor %}
 
-        <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+        <button type="submit" class="btn btn-primary w-100">Editar</button>
     </form>
 </div>
 {% endblock %}
