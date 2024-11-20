@@ -7,8 +7,8 @@ urlpatterns = [
     path('AltaUser/', UsuarioCreateView.as_view(), name='AltaUser'),
     #path('profesional_create/', ProfesionalCreateView.as_view(), name='profesional_create'),
     path('crear_solicitud/', CrearSolicitudView.as_view(), name='crear_solicitud'),
-    path('actualizar_solicitud/<int:pk>/', ActualizarSolicitudView.as_view(), name='actualizar_solicitud'),
-    path('eliminar_solicitud/<int:pk>/', EliminarSolicitudView.as_view(), name='eliminar_solicitud'),
+    path('actualizar_solicitud/<int:id>/', ActualizarSolicitudView.as_view(), name='actualizar_solicitud'),
+    path('eliminar_solicitud/<int:id>/', EliminarSolicitudView.as_view(), name='eliminar_solicitud'),
    
     path('', HomeView.as_view(), name='home'),
 

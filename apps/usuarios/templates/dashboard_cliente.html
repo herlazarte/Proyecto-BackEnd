@@ -26,6 +26,7 @@
         <h2 class="text-center text-dark mb-4">Bienvenido, {{ user.username }}</h2>
         <div class="text-center mb-4">
             <a href="{% url 'crear_solicitud' %}" class="btn btn-warning btn-lg text-white">Solicitar Servicio</a>
+            <a href="{% url 'listado_solicitudes_cliente' %}" class="btn btn-danger btn-lg text-white ml-3">Ver Mis Solicitudes</a>
         </div>
 
         <h4 class="text-dark">Tus Servicios Solicitados</h4>

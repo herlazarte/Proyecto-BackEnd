@@ -8,6 +8,8 @@ from apps.solicitudes.models import Solicitud
 from apps.usuarios.forms import ProfesionalForm, SolicitudForm
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
+from django.views.generic.edit import FormView
+
 
 
 
@@ -128,25 +130,37 @@ class CrearSolicitudView(CreateView):
 
 
 
-class ActualizarSolicitudView(TemplateView):
+class ActualizarSolicitudView(UpdateView):
+    model = Solicitud
     template_name = 'actualizar_solicitud.html'
+    form_class = SolicitudForm
+    success_url = reverse_lazy('listado_solicitudes_cliente')
 
-    def get(self, request, *args, **kwargs):
-        # Obtener la solicitud a actualizar, mediante el id o cualquier otro campo único
-        solicitud = get_object_or_404(Solicitud, id=kwargs['id'])
-        form = SolicitudForm(instance=solicitud, user=request.user)
-        return self.render_to_response({'form': form, 'solicitud': solicitud})
+    def get_object(self, queryset=None):
+        return get_object_or_404(Solicitud, id=self.kwargs['id'])
 
-    def post(self, request, *args, **kwargs):
-        solicitud = get_object_or_404(Solicitud, id=kwargs['id'])
-        form = SolicitudForm(request.POST, instance=solicitud, user=request.user)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.get_object()
+        kwargs['user'] = self.request.user
+        return kwargs
 
-        if form.is_valid():
-            form.save()
-            return redirect('solicitudes:listado_solicitudes')  # Redirigir a listado de solicitudes
+    def get_initial(self):
+        initial = super().get_initial()
+        servicio = self.get_object().servicio
+        if servicio:
+            initial['nombre_servicio'] = servicio.nombre_servicio
+            initial['descripcion_servicio'] = servicio.descripcion
+        return initial
 
-        return self.render_to_response({'form': form, 'solicitud': solicitud})
-
+    def form_valid(self, form):
+        solicitud = form.save(commit=False)
+        servicio = solicitud.servicio
+        if servicio:
+            servicio.nombre_servicio = form.cleaned_data['nombre_servicio']
+            servicio.descripcion = form.cleaned_data['descripcion_servicio']
+            servicio.save()
+        return super().form_valid(form)
 
 
 class EliminarSolicitudView(TemplateView):
@@ -161,7 +175,7 @@ class EliminarSolicitudView(TemplateView):
         # Obtener la solicitud a eliminar
         solicitud = get_object_or_404(Solicitud, id=kwargs['id'])
         solicitud.delete()  # Eliminar la solicitud
-        return redirect('solicitudes:listado_solicitudes') 
+        return redirect('listado_solicitudes_cliente') 
     
 ########## ABM SOLICITUDES ############
 
