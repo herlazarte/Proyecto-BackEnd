@@ -43,7 +43,7 @@
                 <tbody>
                     {% for solicitud in solicitudes %}
                     <tr>
-                        <td>{{ solicitud.servicio.nombre_servicio }}</td>
+                        <td>{{ solicitud.servicio.nombre_servicio }} - {{ solicitud.servicio.descripcion }}</td>
                         <td>{{ solicitud.fecha_servicio }}</td>
                         <td>
                             <span class="badge 
