@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('usuarios/', include('apps.usuarios.urls')),  # Conectar con URLs de la app usuarios
     path("login/", aunth_views.LoginView.as_view(),name='login'),
-    path("logout/", aunth_views.LogoutView.as_view()),
+    path("logout/", aunth_views.LogoutView.as_view(),name='logout'),
     path('', HomeView.as_view(), name='home'),
     # path('servicios/', include('apps.servicios.urls')),
     path('solicitudes/', include('apps.solicitudes.urls')),
