@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Usuario</title>
+    <script>
+        // Función para manejar el cambio en el campo de rol
+        function toggleForms() {
+            var rol = document.getElementById('id_rol').value;  // Obtenemos el valor del rol
+            var clienteForm = document.getElementById('cliente-form');
+            var profesionalForm = document.getElementById('profesional-form');
+            var especialidadField = document.getElementById('id_profesional_form-especialidad');
+
+            // Mostrar solo el formulario correspondiente al rol seleccionado
+            if (rol === 'Cliente') {
+                clienteForm.style.display = 'block';  // Mostrar formulario de Cliente
+                profesionalForm.style.display = 'none';  // Ocultar formulario de Profesional
+                especialidadField.disabled = true;  // Deshabilitar el campo de especialidad
+            } else if (rol === 'Profesional') {
+                clienteForm.style.display = 'none';  // Ocultar formulario de Cliente
+                profesionalForm.style.display = 'block';  // Mostrar formulario de Profesional
+                especialidadField.disabled = false;  // Habilitar el campo de especialidad
+            } else {
+                clienteForm.style.display = 'none';  // Ocultar formulario de Cliente
+                profesionalForm.style.display = 'none';  // Ocultar formulario de Profesional
+                especialidadField.disabled = true;  // Deshabilitar el campo de especialidad
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Crear Usuario</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Formulario de Usuario -->
+        <div>
+            <label for="{{ usuario_form.username.id_for_label }}">Username:</label>
+            {{ usuario_form.username }}
+
+            <label for="{{ usuario_form.email.id_for_label }}">Email address:</label>
+            {{ usuario_form.email }}
+
+            <label for="{{ usuario_form.password.id_for_label }}">Password:</label>
+            {{ usuario_form.password }}
+
+            <label for="{{ usuario_form.rol.id_for_label }}">Rol:</label>
+            {{ usuario_form.rol }}  <!-- Campo de selección de rol -->
+        </div>
+
+        <!-- Formulario para Cliente -->
+        <div id="cliente-form" style="display:none;">
+            <label for="{{ cliente_form.direccion.id_for_label }}">Direccion:</label>
+            {{ cliente_form.direccion }}
+            
+            <label for="{{ cliente_form.telefono.id_for_label }}">Telefono:</label>
+            {{ cliente_form.telefono }}
+        </div>
+
+        <!-- Formulario para Profesional -->
+        <div id="profesional-form" style="display:none;">
+            <label for="{{ profesional_form.especialidad.id_for_label }}">Especialidad:</label>
+            {{ profesional_form.especialidad }}
+
+            <label for="{{ profesional_form.disponibilidad.id_for_label }}">Disponibilidad:</label>
+            {{ profesional_form.disponibilidad }}
+        </div>
+
+        <button type="submit">Crear Usuario</button>
+    </form>
+
+    <script>
+        // Llamar a la función toggleForms cuando el campo 'rol' cambia
+        document.getElementById('id_rol').addEventListener('change', toggleForms);
+
+        // Ejecutar al cargar la página por si ya está seleccionado un rol
+        toggleForms();
+    </script>
+</body>
+</html>

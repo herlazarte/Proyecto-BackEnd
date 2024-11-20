@@ -6,7 +6,9 @@ from apps.solicitudes.models import Solicitud
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['username','email', 'password']
+        fields = ['username','email', 'password','rol']
+    rol = forms.ChoiceField(choices=Usuario.ROLES, widget=forms.Select(attrs={'id': 'id_rol'}))
+
 
     #para encriptar la contraseña 
     def save(self, commit=True):
@@ -24,6 +26,23 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = ['direccion', 'telefono']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['telefono'].required = False
+        self.fields['direccion'].required = False
+
+    def clean_direccion(self):
+        direccion = self.cleaned_data.get('direccion')
+        if direccion is None and self.fields.rol == 'Cliente':
+            raise forms.ValidationError('Este campo es obligatorio para los Clientes.')
+        return direccion
+
+    def clean_telefono(self):
+        telefono = self.cleaned_data.get('telefono')
+        if telefono is None and self.fields.rol == 'Cliente':
+            raise forms.ValidationError('Este campo es obligatorio para los Clientes.')
+        return telefono
+
 
 
 class ProfesionalForm(forms.ModelForm):
@@ -33,7 +52,14 @@ class ProfesionalForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['especialidad'].required = True
+        self.fields['especialidad'].required = False
+
+    def clean_especialidad(self):
+        # Validar solo si el campo es visible
+        especialidad = self.cleaned_data.get('especialidad')
+        if especialidad is None and self.instance.rol == 'Profesional':
+            raise forms.ValidationError('Este campo es obligatorio para los profesionales.')
+        return especialidad
 
 
 
