@@ -6,10 +6,12 @@ from apps.solicitudes.models import Solicitud
 
 class SolicitudesView(TemplateView):
     template_name = "listado_solicitudes.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['solicitudes'] = Solicitud.objects.all()
         return context
+
 
 class SolicitudesClienteView(TemplateView):
     template_name = "dashboard_cliente.html"
