@@ -6,7 +6,7 @@ from apps.solicitudes.models import Solicitud
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['username','email', 'password', 'rol']
+        fields = ['username','email', 'password']
 
     #para encriptar la contraseña 
     def save(self, commit=True):
