@@ -3,11 +3,16 @@
 
 <p>Solicitud: {{ solicitud }}</p>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Guardar Turno</button>
-</form>
+{% if solicitud.turno %}
+    <p>Este turno ya ha sido asignado.</p>
+    <a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary" href="{% url 'listado_solicitudes' %}">Guardar Turno</button>
+    </form>
+    <a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
+{% endif %}
 
-<a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
 {% endblock %}
