@@ -25,8 +25,8 @@
     <section>
         <h2 class="text-center text-dark mb-4">Bienvenido, {{ user.username }}</h2>
         <div class="text-center mb-4">
-            <a href="{% url 'crear_solicitud' %}" class="btn btn-warning btn-lg text-white">Solicitar Servicio</a>
-            <a href="{% url 'listado_solicitudes_cliente' %}" class="btn btn-danger btn-lg text-white ml-3">Ver Mis Solicitudes</a>
+            <a href="{% url 'crear_solicitud' %}" class="btn btn-warning btn-lg text-white">Solicitar servicio</a>
+            <a href="{% url 'listado_solicitudes_cliente' %}" class="btn btn-primary btn-lg text-white ml-3">Ver mis solicitudes</a>
         </div>
 
         <h4 class="text-dark">Tus Servicios Solicitados</h4>
@@ -66,7 +66,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="text-center">No tienes servicios solicitados.</td>
+                        <td colspan="4" class="text-center">Para ver los servicios que has solicitado, haz clic en el botón 'Ver mis solicitudes' y consulta el estado de tus solicitudes.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
