@@ -59,7 +59,7 @@ class UsuarioCreateView(CreateView):
                     profesional.usuario = usuario  # Asignar el usuario al perfil de Profesional
                     profesional.save()  # Guardar el perfil de Profesional
 
-            return redirect(reverse_lazy('home'))
+            return redirect(reverse_lazy('login'))
         # Si no es válido, renderizar nuevamente con los errores
         return render(request, self.template_name, {
             'usuario_form': usuario_form,

@@ -1,81 +1,98 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Usuario</title>
-    <script>
-        // Función para manejar el cambio en el campo de rol
-        function toggleForms() {
-            var rol = document.getElementById('id_rol').value;  // Obtenemos el valor del rol
-            var clienteForm = document.getElementById('cliente-form');
-            var profesionalForm = document.getElementById('profesional-form');
-            var especialidadField = document.getElementById('id_profesional_form-especialidad');
+{% extends 'base.html' %}
+{% load widget_tweaks %}
 
-            // Mostrar solo el formulario correspondiente al rol seleccionado
-            if (rol === 'Cliente') {
-                clienteForm.style.display = 'block';  // Mostrar formulario de Cliente
-                profesionalForm.style.display = 'none';  // Ocultar formulario de Profesional
-                especialidadField.disabled = true;  // Deshabilitar el campo de especialidad
-            } else if (rol === 'Profesional') {
-                clienteForm.style.display = 'none';  // Ocultar formulario de Cliente
-                profesionalForm.style.display = 'block';  // Mostrar formulario de Profesional
-                especialidadField.disabled = false;  // Habilitar el campo de especialidad
-            } else {
-                clienteForm.style.display = 'none';  // Ocultar formulario de Cliente
-                profesionalForm.style.display = 'none';  // Ocultar formulario de Profesional
-                especialidadField.disabled = true;  // Deshabilitar el campo de especialidad
-            }
-        }
-    </script>
-</head>
+
+{% block content %}
 <body>
-    <h2>Crear Usuario</h2>
-    <form method="post">
-        {% csrf_token %}
-        
-        <!-- Formulario de Usuario -->
-        <div>
-            <label for="{{ usuario_form.username.id_for_label }}">Username:</label>
-            {{ usuario_form.username }}
-
-            <label for="{{ usuario_form.email.id_for_label }}">Email address:</label>
-            {{ usuario_form.email }}
-
-            <label for="{{ usuario_form.password.id_for_label }}">Password:</label>
-            {{ usuario_form.password }}
-
-            <label for="{{ usuario_form.rol.id_for_label }}">Rol:</label>
-            {{ usuario_form.rol }}  <!-- Campo de selección de rol -->
+   
+    <div class="container py-5">
+        <h2 class="text-center text-dark mb-4">Registro de Usuario</h2>
+        <form method="post" id="registroForm" class="bg-light p-4 rounded shadow-sm">
+            {% csrf_token %}
+    
+            <!-- Campos del formulario -->
+            <div class="mb-3">
+                <label for="{{ usuario_form.username.id_for_label }}" class="form-label text-dark">Username:</label>
+                {{ usuario_form.username|add_class:"form-control" }}
+            </div>
+    
+            <div class="mb-3">
+                <label for="{{ usuario_form.email.id_for_label }}" class="form-label text-dark">Email Address:</label>
+                {{ usuario_form.email|add_class:"form-control" }}
+            </div>
+    
+            <div class="mb-3">
+                <label for="{{ usuario_form.password.id_for_label }}" class="form-label text-dark">Password:</label>
+                {{ usuario_form.password|add_class:"form-control" }}
+            </div>
+    
+            <div class="mb-3">
+                <label for="{{ usuario_form.rol.id_for_label }}" class="form-label text-dark">Rol:</label>
+                {{ usuario_form.rol|add_class:"form-select" }}
+            </div>
+    
+            <!-- Formulario para Cliente -->
+            <div id="cliente-form" class="d-none">
+                <div class="mb-3">
+                    <label for="{{ cliente_form.direccion.id_for_label }}" class="form-label text-dark">Dirección:</label>
+                    {{ cliente_form.direccion|add_class:"form-control" }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ cliente_form.telefono.id_for_label }}" class="form-label text-dark">Teléfono:</label>
+                    {{ cliente_form.telefono|add_class:"form-control" }}
+                </div>
+            </div>
+    
+            <!-- Formulario para Profesional -->
+            <div id="profesional-form" class="d-none">
+                <div class="mb-3">
+                    <label for="{{ profesional_form.especialidad.id_for_label }}" class="form-label text-dark">Especialidad:</label>
+                    {{ profesional_form.especialidad|add_class:"form-control" }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ profesional_form.disponibilidad.id_for_label }}" class="form-label text-dark">Disponibilidad:</label>
+                    {{ profesional_form.disponibilidad|add_class:"form-check-input" }}
+                </div>
+            </div>
+    
+            <!-- Botón para enviar -->
+            <button type="submit" class="btn btn-primary w-100 text-white">Crear Usuario</button>
+        </form>
+    
+        <!-- Alerta de éxito -->
+        <div id="alertaExito" class="alert alert-success d-none mt-4" role="alert">
+            <strong>¡Registro exitoso!</strong> El usuario ha sido registrado correctamente.
         </div>
-
-        <!-- Formulario para Cliente -->
-        <div id="cliente-form" style="display:none;">
-            <label for="{{ cliente_form.direccion.id_for_label }}">Direccion:</label>
-            {{ cliente_form.direccion }}
-            
-            <label for="{{ cliente_form.telefono.id_for_label }}">Telefono:</label>
-            {{ cliente_form.telefono }}
-        </div>
-
-        <!-- Formulario para Profesional -->
-        <div id="profesional-form" style="display:none;">
-            <label for="{{ profesional_form.especialidad.id_for_label }}">Especialidad:</label>
-            {{ profesional_form.especialidad }}
-
-            <label for="{{ profesional_form.disponibilidad.id_for_label }}">Disponibilidad:</label>
-            {{ profesional_form.disponibilidad }}
-        </div>
-
-        <button type="submit">Crear Usuario</button>
-    </form>
+    </div>
+    
+    
 
     <script>
-        // Llamar a la función toggleForms cuando el campo 'rol' cambia
-        document.getElementById('id_rol').addEventListener('change', toggleForms);
+           // Scripts originales para manejar la visibilidad de los formularios según el rol
+    document.getElementById('id_rol').addEventListener('change', toggleForms);
+    toggleForms();
 
-        // Ejecutar al cargar la página por si ya está seleccionado un rol
-        toggleForms();
+    function toggleForms() {
+        var rol = document.getElementById('id_rol').value;
+        var clienteForm = document.getElementById('cliente-form');
+        var profesionalForm = document.getElementById('profesional-form');
+        var especialidadField = document.getElementById('id_profesional_form-especialidad');
+
+        if (rol === 'Cliente') {
+            clienteForm.classList.remove('d-none');
+            profesionalForm.classList.add('d-none');
+            especialidadField.disabled = true;
+        } else if (rol === 'Profesional') {
+            clienteForm.classList.add('d-none');
+            profesionalForm.classList.remove('d-none');
+            especialidadField.disabled = false;
+        } else {
+            clienteForm.classList.add('d-none');
+            profesionalForm.classList.add('d-none');
+            especialidadField.disabled = true;
+        }
+    }
     </script>
+    
 </body>
-</html>
+{% endblock %}
