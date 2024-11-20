@@ -57,12 +57,7 @@ class UsuarioCreateView(CreateView):
                     profesional.usuario = usuario  # Asignar el usuario al perfil de Profesional
                     profesional.save()  # Guardar el perfil de Profesional
 
-            # Redirigir a la página de dashboard dependiendo del rol
-            if usuario.rol == 'Cliente':
-                return redirect('dashboard')  # Redirigir al dashboard de Cliente
-            elif usuario.rol == 'Profesional':
-                return redirect('dashboard_profesional')  # Redirigir al dashboard de Profesional
-
+            return redirect(reverse_lazy('home'))
         # Si no es válido, renderizar nuevamente con los errores
         return render(request, self.template_name, {
             'usuario_form': usuario_form,
@@ -73,32 +68,15 @@ class UsuarioCreateView(CreateView):
 # inicio
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     def test_func(self):
-        # Verificamos si el usuario está autenticado
-        if not self.request.user.is_authenticated:
-            return False  # Denegamos el acceso si el usuario no está autenticado
+        return self.request.user.is_authenticated and self.request.user.rol is not None
 
-        # Intentamos obtener el cliente asociado al usuario
-        try:
-            cliente = Cliente.objects.get(usuario=self.request.user)
-            # Accedemos al rol del usuario a través de cliente.usuario
-            if cliente.usuario.rol == 'Cliente':
-                self.template_name = 'dashboard_cliente.html'
-            elif cliente.usuario.rol == 'Profesional':  # Si el rol está en el Usuario
-                self.template_name = 'dashboard_profesional.html'
-            else:
-                return False  # Si no es un rol válido, denegamos el acceso
-        except Cliente.DoesNotExist:
-            # Si no existe un cliente asociado al usuario, se deniega el acceso
-            return False
-        return True
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Puedes agregar datos adicionales al contexto si lo necesitas
-        return context
-
-
-    
+    def get_template_names(self):
+        if self.request.user.rol == 'Cliente':
+            return ['dashboard_cliente.html']
+        elif self.request.user.rol == 'Profesional':
+            return ['dashboard_profesional.html']
+        else:
+            return ['base.html']  # Plantilla por defecto
 ########## ABM SOLICITUDES ############
 
 # class ListarSolicitudesView(ListView):
