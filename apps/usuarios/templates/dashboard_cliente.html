@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-          <h1 class="navbar-brand text-warning" href="#">keyServ</h1>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Cerrar sesión</a>
-              </li>
-            </ul>
-          </div>
+            <h1 class="navbar-brand text-warning" href="#">keyServ</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Cerrar sesión</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </nav>
-      {% endblock %}
+    </nav>
+{% endblock %}
 
 {% block content %}
   <!-- Main Content -->
@@ -72,6 +72,19 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Recomendaciones para Clientes -->
+        <section class="mt-5 p-4 bg-light rounded shadow-sm">
+            <h4 class="text-center text-dark mb-3">Recomendaciones para Solicitar Servicios</h4>
+            <ul>
+                <li><strong>Organiza tus solicitudes:</strong> Si necesitas varios servicios, considera agruparlos para optimizar el tiempo de los profesionales y reducir los costos de desplazamiento.</li>
+                <li><strong>Sea puntual:</strong> La puntualidad es clave tanto para ti como para los profesionales que brindan el servicio. Asegúrate de estar disponible en la fecha y hora acordada.</li>
+                <li><strong>Describa bien el servicio:</strong> Asegúrate de detallar claramente lo que necesitas para que el profesional esté completamente informado y preparado.</li>
+                <li><strong>Verifica el estado de tu solicitud:</strong> Revisa regularmente el estado de tus solicitudes para estar al tanto de cualquier actualización.</li>
+                <li><strong>Revisa las políticas de cancelación:</strong> Conoce las condiciones y plazos para cancelar o modificar una solicitud, en caso de que surjan imprevistos.</li>
+            </ul>
+        </section>
+
     </section>
 </main>
 
@@ -101,8 +114,7 @@
   function confirmDelete(solicitudId) {
     // Cambiar la acción del formulario con la URL dinámica
     const deleteForm = document.getElementById('deleteForm');
-    deleteForm.action = `/usuarios/eliminar_solicitud/${solicitudId}/`;
- // Construye la URL con el ID de la solicitud
+    deleteForm.action = `/usuarios/eliminar_solicitud/${solicitudId}/`; // Construye la URL con el ID de la solicitud
 
     // Mostrar el modal
     const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
