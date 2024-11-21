@@ -1,7 +1,28 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 
+
+{% block navbar %}
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <h1 class="navbar-brand text-warning" href="#">keyServ</h1>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}">Volver</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+{% endblock %}
+
 {% block content %}
+
 <main class="container py-5 d-flex flex-column min-vh-100">
     <h2 class="text-center text-dark mb-4">Asignar Turno</h2>
 
@@ -10,7 +31,7 @@
     {% if solicitud.turno %}
         <p class="alert alert-warning text-center">Este turno ya ha sido asignado.</p>
         <div class="text-center">
-            <a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
+            <a href="{% url 'listado_solicitudes' %}" class="btn btn-danger">Cancelar</a>
         </div>
     {% else %}
         <form method="post" class="d-flex flex-column align-items-center">
@@ -31,14 +52,12 @@
                 {{ form.fecha_turno|add_class:"form-control" }}
             </div>
 
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-warning text-white">Guardar Turno</button>
+            <div class="d-flex justify-content-center mt-4">
+                <!-- Botones uno al lado del otro -->
+                <button type="submit" class="btn btn-warning text-white me-3">Guardar Turno</button>
+                <a href="{% url 'listado_solicitudes' %}" class="btn btn-danger">Cancelar</a>
             </div>
         </form>
-        
-        <div class="text-center mt-4">
-            <a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
-        </div>
     {% endif %}
 </main>
 {% endblock %}
