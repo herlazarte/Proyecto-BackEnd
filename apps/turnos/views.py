@@ -6,6 +6,7 @@ from apps.solicitudes.models import Solicitud
 from apps.turnos.forms import TurnoForm
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
+from django.urls import reverse_lazy
 
 
 class AsignarTurnoView(FormView):
@@ -40,7 +41,8 @@ class AsignarTurnoView(FormView):
 
         # Mensaje de éxito y redirección
         messages.success(self.request, "Turno asignado correctamente. La solicitud ha sido actualizada.")
-        return redirect('asignar_turno', solicitud_id=solicitud.id)
+        # return redirect('asignar_turno', solicitud_id=solicitud.id)
+        return redirect(reverse_lazy('listado_solicitudes'))
 
     def form_invalid(self, form):
         """Renderiza la página nuevamente con los errores."""
