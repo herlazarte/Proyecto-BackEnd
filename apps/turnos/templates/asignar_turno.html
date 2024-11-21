@@ -1,18 +1,44 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
 {% block content %}
-<h2>Asignar Turno</h2>
+<main class="container py-5 d-flex flex-column min-vh-100">
+    <h2 class="text-center text-dark mb-4">Asignar Turno</h2>
 
-<p>Solicitud: {{ solicitud }}</p>
+    <h3 class="text-center text-dark mb-4">Cliente: <strong>{{ solicitud.cliente }}</strong></h3>
 
-{% if solicitud.turno %}
-    <p>Este turno ya ha sido asignado.</p>
-    <a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
-{% else %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary" href="{% url 'listado_solicitudes' %}">Guardar Turno</button>
-    </form>
-    <a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
-{% endif %}
+    {% if solicitud.turno %}
+        <p class="alert alert-warning text-center">Este turno ya ha sido asignado.</p>
+        <div class="text-center">
+            <a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    {% else %}
+        <form method="post" class="d-flex flex-column align-items-center">
+            {% csrf_token %}
+            
+            <!-- Campo Estado (Aceptado/Rechazado) -->
+            <div class="mb-3 w-50">
+                <label for="estado" class="form-label text-dark">Estado:</label>
+                <select name="estado" id="estado" class="form-control">
+                    <option value="Aceptado">Aceptado</option>
+                    <option value="Rechazado">Rechazado</option>
+                </select>
+            </div>
 
+            <!-- Campo Fecha del Turno -->
+            <div class="mb-3 w-50">
+                <label for="fecha_turno" class="form-label text-dark">Fecha del Turno:</label>
+                {{ form.fecha_turno|add_class:"form-control" }}
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-warning text-white">Guardar Turno</button>
+            </div>
+        </form>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'listado_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    {% endif %}
+</main>
 {% endblock %}
