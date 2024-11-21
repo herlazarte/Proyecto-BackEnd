@@ -1,13 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Dashboard Profesional</h1>
-    <a href="{% url 'listado_solicitudes' %}">Ver Solicitudes</a>
+{% extends 'base.html' %}
+
+{% block navbar %}
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+          <h1 class="navbar-brand text-warning" href="#">keyServ</h1>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Cerrar sesión</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% endblock %}
+
+
+      {% block content %} 
+<main class="container py-5 d-flex flex-column min-vh-100">
+    <!-- Título principal -->
+    <h2 class="text-center text-dark mb-4">Bienvenido, {{ user.username }}</h2>
     
-</body>
-</html>
+    <!-- Botón para ver solicitudes -->
+    <div class="text-center mb-4">
+        <a href="{% url 'listado_solicitudes' %}" class="btn btn-warning btn-lg text-white">Ver solicitudes</a>
+    </div>
+
+    <!-- Sección de sugerencias y recomendaciones -->
+    <div class="alert alert-info mb-4" role="alert">
+        <h5 class="alert-heading">Consejos para una mejor atención</h5>
+        <ul>
+            <li><strong>Puntualidad:</strong> La puntualidad es clave para generar confianza y satisfacción en tus clientes.</li>
+            <li><strong>Comunicación clara:</strong> Mantén una comunicación constante y clara con los clientes sobre el progreso de los servicios.</li>
+            <li><strong>Confirmación de turnos:</strong> Asegúrate de confirmar los turnos y horarios con tus clientes antes de la cita.</li>
+            <li><strong>Higiene y seguridad:</strong> No olvides seguir protocolos de higiene y seguridad, tanto para ti como para los clientes.</li>
+            <li><strong>Mejorar tus habilidades:</strong> Considera tomar cursos o capacitaciones para mejorar tus conocimientos y habilidades profesionales.</li>
+        </ul>
+    </div>
+
+    <!-- Recomendación de herramientas y materiales (generalizada para varios servicios) -->
+    <div class="alert alert-success mb-4" role="alert">
+        <h5 class="alert-heading">Recomendación de herramientas y materiales</h5>
+        <p>Para asegurar la mejor calidad en tu trabajo, te recomendamos tener a disposición los siguientes elementos comunes para una variedad de servicios:</p>
+        <ul>
+            <li>Herramientas básicas como destornilladores, martillos, y alicates.</li>
+            <li>Materiales de seguridad como guantes, gafas protectoras y mascarillas.</li>
+            <li>Equipos especializados para cada tipo de trabajo, como taladros, sierras, o bombas de agua.</li>
+            <li>Productos de limpieza y mantenimiento para dejar siempre un espacio ordenado y seguro para el cliente.</li>
+        </ul>
+    </div>
+
+    <!-- Sección adicional de apoyo -->
+    <div class="alert alert-warning" role="alert">
+        <h5 class="alert-heading">¿Necesitas ayuda?</h5>
+        <p>Si tienes alguna duda o necesitas asistencia para mejorar tus servicios, no dudes en ponerte en contacto con nuestro equipo de soporte.</p>
+    </div>
+</main>
+{% endblock %}
+
