@@ -54,7 +54,7 @@
                 <td>
                   {% if solicitud.turno_asignado %}
                       {% if solicitud.estado_turno == 'Aceptado' %}
-                        <button class="btn btn-secondary btn-sm" disabled>Turno Asignado</button>
+                        <button class="btn btn-success btn-sm" disabled>Turno Asignado</button>
                       {% elif solicitud.estado_turno == 'Rechazado' %}
                         <button class="btn btn-danger btn-sm" disabled>Turno Rechazado</button>
                       {% endif %}
