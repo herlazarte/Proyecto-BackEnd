@@ -11,7 +11,7 @@ class Turno(models.Model):
     profesional = models.ForeignKey(Profesional, on_delete=models.CASCADE)
     solicitud = models.ForeignKey(Solicitud, on_delete=models.CASCADE)
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES)
-    fecha_turno = models.DateField(null=True, blank=True, default=None)
+    fecha_turno = models.DateField(null=True, blank=True, default=None)# para que black
 
     def __str__(self):
         return f"{self.profesional} - {self.solicitud}"
