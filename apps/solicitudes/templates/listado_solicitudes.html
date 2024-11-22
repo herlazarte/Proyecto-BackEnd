@@ -29,8 +29,7 @@
                 <th>Servicio</th>
                 <th>Cliente</th>
                 <th>Fecha Solicitud</th>
-                <th>Estado</th>
-                <th>Accion</th>
+                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
@@ -39,18 +38,6 @@
                 <td>{{ solicitud.servicio }}</td>
                 <td>{{ solicitud.cliente }}</td>
                 <td>{{ solicitud.fecha_servicio }}</td>
-                <td>
-                  {% if solicitud.turno_asignado %}
-                    {% if solicitud.estado_turno == 'Aceptado' %}
-                      <span class="badge bg-success">Aceptado</span>
-                    {% elif solicitud.estado_turno == 'Rechazado' %}
-                      <span class="badge bg-danger">Rechazado</span>  
-                    {% endif %}
-                  {% else %}
-                    <span class="badge bg-secondary">Pendiente</span>
-                  {% endif %}
-
-                </td>
                 <td>
                   {% if solicitud.turno_asignado %}
                       {% if solicitud.estado_turno == 'Aceptado' %}
@@ -68,4 +55,3 @@
     </table>
 </main>
 {% endblock %}
-

@@ -59,4 +59,26 @@
         </form>
     {% endif %}
 </main>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const estadoSelect = document.getElementById('estado');
+      const fechaTurnoInput = document.getElementById('id_fecha_turno'); // ID generado por Django para el input de fecha
+
+      // Función para manejar el estado del campo Fecha
+      function toggleFechaTurno() {
+          if (estadoSelect.value === 'Rechazado') {
+              fechaTurnoInput.value = ''; // Deja el campo vacío
+              fechaTurnoInput.setAttribute('disabled', 'true'); // Deshabilita el campo
+          } else {
+              fechaTurnoInput.removeAttribute('disabled'); // Habilita el campo
+          }
+      }
+
+      // Inicializar estado al cargar
+      toggleFechaTurno();
+
+      // Escuchar cambios en el campo Estado
+      estadoSelect.addEventListener('change', toggleFechaTurno);
+  });
+</script>
 {% endblock %}
