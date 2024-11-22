@@ -22,16 +22,15 @@
 {% endblock %}
 
 {% block content %}
-
 <main class="container py-5 d-flex flex-column min-vh-100">
     <h2 class="text-center text-dark mb-4">Asignar Turno</h2>
 
     <h3 class="text-center text-dark mb-4">Cliente: <strong>{{ solicitud.cliente }}</strong></h3>
 
-    {% if solicitud.turno %}
-        <p class="alert alert-warning text-center">Este turno ya ha sido asignado.</p>
+    {% if solicitud.turno_asignado %}
+        <p class="alert alert-warning text-center">Este turno ya ha sido asignado. No puedes asignar un nuevo turno.</p>
         <div class="text-center">
-            <a href="{% url 'listado_solicitudes' %}" class="btn btn-danger">Cancelar</a>
+            <a href="{% url 'listado_solicitudes' %}" class="btn btn-danger">Regresar</a>
         </div>
     {% else %}
         <form method="post" class="d-flex flex-column align-items-center">

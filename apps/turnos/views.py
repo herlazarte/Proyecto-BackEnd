@@ -14,11 +14,13 @@ class AsignarTurnoView(FormView):
     form_class = TurnoForm
 
     def get_context_data(self, **kwargs):
-        """Agregamos la solicitud al contexto para usarla en el template."""
+        """Agregamos la solicitud y la validación al contexto para usarla en el template."""
         context = super().get_context_data(**kwargs)
         solicitud_id = self.kwargs['solicitud_id']
         solicitud = get_object_or_404(Solicitud, id=solicitud_id)
         context['solicitud'] = solicitud
+        # Verificar si ya existe un turno asociado a la solicitud
+        context['turno_asignado'] = Turno.objects.filter(solicitud=solicitud).exists()
         return context
 
     def form_valid(self, form):
@@ -28,6 +30,11 @@ class AsignarTurnoView(FormView):
         if not hasattr(self.request.user, 'profesional'):
             messages.error(self.request, "Tu cuenta no tiene un profesional asociado o permisos para asignar turnos.")
             return redirect('home')
+
+        # Verificar si la solicitud ya tiene un turno
+        if Turno.objects.filter(solicitud=solicitud).exists():
+            messages.error(self.request, "Esta solicitud ya tiene un turno asignado.")
+            return redirect('listado_solicitudes')
 
         # Crear el turno con el estado seleccionado
         turno = form.save(commit=False)
@@ -41,7 +48,6 @@ class AsignarTurnoView(FormView):
 
         # Mensaje de éxito y redirección
         messages.success(self.request, "Turno asignado correctamente. La solicitud ha sido actualizada.")
-        # return redirect('asignar_turno', solicitud_id=solicitud.id)
         return redirect(reverse_lazy('listado_solicitudes'))
 
     def form_invalid(self, form):

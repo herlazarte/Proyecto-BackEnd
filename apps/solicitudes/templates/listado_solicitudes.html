@@ -39,9 +39,23 @@
                 <td>{{ solicitud.cliente }}</td>
                 <td>{{ solicitud.fecha_servicio }}</td>
                 <td>
-                    <a href="{% url 'asignar_turno' solicitud.id %}" class="btn btn-primary btn-sm">
-                        <i class="fas fa-calendar-check"></i> Asignar Turno
-                    </a>
+                  {% if solicitud.turno_asignado %}
+                    {% if solicitud.estado_turno == 'Aceptado' %}
+                      <span class="badge bg-success">Aceptado</span>
+                    {% elif solicitud.estado_turno == 'Rechazado' %}
+                      <span class="badge bg-danger">Rechazado</span>  
+                    {% endif %}
+                  {% else %}
+                    <span class="badge bg-secondary">Pendiente</span>
+                  {% endif %}
+
+                </td>
+                <td>
+                  {% if solicitud.turno_asignado %}
+                      <button class="btn btn-secondary btn-sm" disabled>Turno Asignado</button>
+                  {% else %}
+                      <a href="{% url 'asignar_turno' solicitud.id %}" class="btn btn-primary btn-sm">Asignar Turno</a>
+                  {% endif %}
                 </td>
             </tr>
             {% endfor %}
