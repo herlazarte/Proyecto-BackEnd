@@ -16,7 +16,7 @@ class Cliente(models.Model):
     telefono = models.CharField(max_length=15)
 
     def __str__(self):
-        return self.usuario.username
+        return f"{self.usuario.username} - {self.direccion} - {self.telefono}"
 
 class Profesional(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
